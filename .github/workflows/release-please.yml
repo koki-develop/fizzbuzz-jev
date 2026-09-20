@@ -1,0 +1,49 @@
+name: Release Please
+
+permissions: {}
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # for creating releases
+      issues: write # for creating labels
+      pull-requests: write # for creating pull requests
+    outputs:
+      release-created: ${{ steps.release-please.outputs.release_created }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        id: release-please
+        with:
+          token: ${{ github.token }}
+          release-type: node
+
+  release:
+    needs: release-please
+    if: needs.release-please.outputs.release-created == 'true'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # for OIDC authentication to npm registry
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+
+      - run: echo 'registry=https://registry.npmjs.org' > .npmrc
+      - run: npm publish
