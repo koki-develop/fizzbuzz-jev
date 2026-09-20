@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "lib": ["es2024"],
+    "module": "preserve",
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["src", "tsdown.config.ts"]
+}
