@@ -1,0 +1,33 @@
+{
+  "name": "fizzbuzz-jev",
+  "version": "0.0.0",
+  "homepage": "https://github.com/koki-develop/fizzbuzz-jev",
+  "license": "MIT",
+  "author": "koki-develop <kou.pg.0131@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koki-develop/fizzbuzz-jev.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "tsdown": "0.23.0",
+    "typescript": "7.0.2"
+  }
+}
